@@ -3,65 +3,67 @@
 #include "led.h"
 #include "buzzer.h"
 
-char toggle_red()		/* always toggle! */
-{
-  static char state = 0;
+static char up;
 
-  switch (state) {
-  case 0:
-    red_on = 1;
-    state = 1;
-    break;
-  case 1:
-    red_on = 0;
-    state = 0;
-    break;
-  }
-  return 1;			/* always changes an led */
-}
-
-char toggle_green()	/* only toggle green if red is on!  */
-{
-  char changed = 0;
-  if (red_on) {
-    green_on ^= 1;
-    changed = 1;
-  }
-  return changed;
-}
-
-void stay_red()
+void stay_red() /*  set the red LED on */
 {
   red_on = 1;
-  led_changed = red_on;
-  led_update();
 }
 
-void red_off()
+void red_off() /* set the red LED off */
 {
   red_on = 0;
-  led_changed = red_on;
-  led_update();
 }
 
-void buzz(short freq)
+void stay_green()/* set the green LED on */
 {
-  buzzer_set_period(freq);
+  green_on = 1;
 }
 
-void state_advance()		/* alternate between toggling red & green */
+void green_off()/* set the green LED off */
 {
-  char changed = 0;  
-
-  static enum {R=0, G=1} color = G;
-  switch (color) {
-  case R: changed = toggle_red(); color = G; break;
-  case G: changed = toggle_green(); color = R; break;
-  }
-
-  led_changed = changed;
-  led_update();
+  green_on = 0;
 }
 
+void siren_on()/* activate the siren */
+{
+  double x;
+  short cycles = 0;
+  if(up) x += 225; /* x is 225 Hz  */
+  else x += 450; /* x is 450 Hz*/
+  
+  x = (x / 1000) * 500;/* Converting x to kHz then into cycles */
+  cycles += x;
+  buzzer_set_period(cycles);
+}
 
+void buzz_off()/* Turns off buzzer */
+{
+  buzzer_set_period(0);
+}
 
+void siren_advance()/* alternate between toggling red & green */
+{
+  static char state = 0;
+  switch(state)
+    {
+    case 0:/* state 1 green on, red off */
+      /* if this doesnt work try making an update_led state that takes in the value of red and green on  */
+      stay_green();
+      red_off();
+      up = 1;
+      led_changed = 1;
+      led_update();
+      state++;
+      break;
+    case 1:/* state 2 red on, green off*/
+      stay_red();
+      green_off();
+      up = 0;
+      led_changed = 1;
+      led_update();
+      state = 0;
+    default:
+      break;
+    }
+}

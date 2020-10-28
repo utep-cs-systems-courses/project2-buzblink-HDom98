@@ -8,14 +8,14 @@ LDFLAGS		= -L/opt/ti/msp430_gcc/include
 CC              = msp430-elf-gcc
 AS              = msp430-elf-as
 
-all: blink.elf 
+all: salt.elf 
 
 #additional rules for files
-blink.elf: ${COMMON_OBJECTS}buzzer.o blinkMain.o stateMachines.o led.o wdInterruptHandler.o ../lib/libTimer.a
+salt.elf: ${COMMON_OBJECTS}buzzer.o main.o stateMachines.o led.o wdInterruptHandler.o ../lib/libTimer.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
-load: blink.elf
-	msp430loader.sh blink.elf
+load: salt.elf
+	msp430loader.sh salt.elf
 
 clean:
 	rm -f *.o *.elf *~
@@ -24,6 +24,6 @@ led.o: led.c led.h
 
 wdInterruptHandler.o: stateMachines.h
 
-stateMachines.o: led.h stateMachines.h
+stateMachines.o: buzzer.h led.h stateMachines.h
 
-buzzer.c: buzzer.h
+buzzer.o: buzzer.h
