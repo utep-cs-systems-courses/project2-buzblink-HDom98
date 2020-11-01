@@ -6,7 +6,7 @@
 
 int main(void) {
   configureClocks();		/* setup master oscillator, CPU & peripheral clocks */
-  int swState;
+  // switch_state_down = 0;
   switch_init();
   led_init();
   buzzer_init();
