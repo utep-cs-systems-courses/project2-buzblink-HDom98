@@ -10,8 +10,8 @@ switch_update_interrupt_sense()
   char p2val = P2IN;
   /* update switch interrupt to detect changes from current buttons */
     
-      P2IES |= (p2val & SW4);	/* if switch up, sense down */
-      P2IES &= (p2val |~SW4);   /* if switch down, sense up */
+      P2IES |= (p2val & SWITCHES);	/* if switch up, sense down */
+      P2IES &= (p2val |~SWITCHES);   /* if switch down, sense up */
   
   /* P2IES.0 &= (p2val | ~SW1);	 if switch down, sense up */
   
@@ -33,12 +33,12 @@ switch_interrupt_handler()
 {/* called when switch interrupt */
   char p2val = switch_update_interrupt_sense();
   
-  if(p2val & SW1)switch_state_down = 0;
+  if((p2val & SW1)==0)switch_state_down = 0;
     
-  if(p2val & SW2)switch_state_down = 1;
+  if((p2val & SW2)==0)switch_state_down = 1;
     
-  if(p2val & SW3)switch_state_down = 2;
+  if((p2val & SW3)==0)switch_state_down = 2;
     
-  if(p2val & SW4)switch_state_down = 3;
+  if((p2val & SW4)==0)switch_state_down = 3;
     
 }
