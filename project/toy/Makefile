@@ -11,7 +11,7 @@ AS              = msp430-elf-as
 all: salt.elf 
 
 #additional rules for files
-salt.elf: ${COMMON_OBJECTS}buzzer.o main.o stateMachines.o led.o wdInterruptHandler.o ../lib/libTimer.a
+salt.elf: ${COMMON_OBJECTS} buzzer.o main.o stateMachines.o led.o switches.o wdInterruptHandler.o ../lib/libTimer.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
 load: salt.elf
@@ -22,7 +22,7 @@ clean:
 
 led.o: led.c led.h
 
-wdInterruptHandler.o: stateMachines.h
+wdInterruptHandler.o: stateMachines.h buzzer.h switches.h
 
 stateMachines.o: buzzer.h led.h stateMachines.h
 
