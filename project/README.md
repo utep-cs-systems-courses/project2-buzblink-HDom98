@@ -1,4 +1,6 @@
 ## Description
+Siren And Lights Toy
+
 This program uses the 4 buttons to switch through states
 
 switch 1- plays a siren and alternates between LEDs
