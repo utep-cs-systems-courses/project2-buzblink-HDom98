@@ -17,7 +17,7 @@ __interrupt_vec(WDT_VECTOR) WDT(){	/* 250 interrupts/sec */
        }
      break;
     case 1:/* light dimming state */
-      if((++count % 50) == 0)
+      if((++count % 75) == 0)
 	light_advance();
       break;
     case 2:/* blinking light state */
